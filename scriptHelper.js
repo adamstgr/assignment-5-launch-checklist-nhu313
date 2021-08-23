@@ -22,15 +22,37 @@ function addDestinationInfo(document, name, diameter, star, distance, moons, ima
 }
 
 function validateInput(testInput) {
-  //check if the test Input is empty
+  if (testInput === '') {
+    return 'Empty';
+  } else if (isNaN(testInput)) {
+    return 'Not a Number'
+  } else {
+    return 'Is a Number'
+  }
+}
+//check if the test Input is empty
     // if it is, return 'Empty'
   // check if it's not a number isNaN
     // return 'Not a Number'
   // else
     // return 'Is a Number'
-}
-
 function formSubmission(document, list, pilotValue, copilotValue, fuelLevelValue, cargoLevelValue) {
+  let form = document.querySelector("form");
+  form.addEventListener("submit", function(event) {
+    if (validateInput(pilotValue) === 'Empty' || validateInput(copilotValue) === 'Empty' || validateInput(fuelLevelValue) === 'Empty' || validateInput(cargoLevelValue) === 'Empty') {
+      alert('Please fill in all fields!');
+      event.preventDefault();
+    } else if (validateInput(fuelLevelValue) === 'Not a Number' || validateInput(cargoLevelValue) === 'Not a Number') {
+      alert('Please enter a number for Fuel Level and Cargo Mass.');
+      event.preventDefault();
+    } else if (validateInput(pilotValue) === 'Is a Number' || validateInput(copilotValue) === 'Is a Number') {
+      alert('Please enter a name comprised only of letters for the Pilot and Co-Pilot names.')
+      event.preventDefault();
+    }
+  });
+  
+}
+  
   // check if any of the values are empty
     // if (validateInput(pilotValue) === 'Empty' || validateInput(copilotValue) === 'Empty')
     // alert user that they need to fill out all the fields alert('message')
@@ -51,8 +73,6 @@ function formSubmission(document, list, pilotValue, copilotValue, fuelLevelValue
 
     // if both fuel and cargo are good
       // change the launchStatus to "Shuttle is Ready for Launch" and color to green
-}
-
 async function myFetch() {
     let planetsReturned;
 

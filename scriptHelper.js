@@ -2,6 +2,20 @@
 require('isomorphic-fetch');
 
 function addDestinationInfo(document, name, diameter, star, distance, moons, imageUrl) {
+let missionTarget = document.getElementbyId('missionTarget');
+missionTarget.innerHTML = 
+    `
+    <h2>Mission Destination</h2>
+    <ol>
+      <li>Name: ${planet.name}</li>
+      <li>Diameter:${planet.diameter} </li>
+      <li>Star: ${planet.star}</li>
+      <li>Distance from Earth: ${planet.distance} </li>
+      <li>Number of Moons: ${planet.moons} </li>
+    </ol>
+    <img src="${planet.image}">
+    `
+}
   // get the missionTarget div
   // set the inner HTML to this
   // fill in the information that is passed in
@@ -19,12 +33,12 @@ function addDestinationInfo(document, name, diameter, star, distance, moons, ima
                 <img src="">
                 `
    */
-}
+
 
 function validateInput(testInput) {
   if (testInput === '') {
     return 'Empty';
-  } else if (isNaN(testInput)) {
+  } else if (isNaN(Number(testInput))) {
     return 'Not a Number'
   } else {
     return 'Is a Number'
@@ -37,21 +51,40 @@ function validateInput(testInput) {
   // else
     // return 'Is a Number'
 function formSubmission(document, list, pilotValue, copilotValue, fuelLevelValue, cargoLevelValue) {
-  let form = document.querySelector("form");
-  form.addEventListener("submit", function(event) {
     if (validateInput(pilotValue) === 'Empty' || validateInput(copilotValue) === 'Empty' || validateInput(fuelLevelValue) === 'Empty' || validateInput(cargoLevelValue) === 'Empty') {
       alert('Please fill in all fields!');
-      event.preventDefault();
     } else if (validateInput(fuelLevelValue) === 'Not a Number' || validateInput(cargoLevelValue) === 'Not a Number') {
       alert('Please enter a number for Fuel Level and Cargo Mass.');
-      event.preventDefault();
     } else if (validateInput(pilotValue) === 'Is a Number' || validateInput(copilotValue) === 'Is a Number') {
       alert('Please enter a name comprised only of letters for the Pilot and Co-Pilot names.')
-      event.preventDefault();
+    } 
+    let list = document.getElementById('faultyItems');
+    list.style.visibility = 'visible';
+
+    let pilotStatus = document.getElementById('pilotStatus');
+    pilotStatus.innerHTML = `Pilot ${pilotValue} is ready for launch`;
+
+    let copilotStatus = document.getElementById('copilotStatus');
+    copilotStatus.innerHTML = `Pilot ${copilotValue} is ready for launch`;
+
+    let fuelStatus = document.getElementById('fuelStatus');
+    let cargoStatus = document.getElementById('cargoStatus');
+    let launchStatus = document.getElementById('launchStatus');
+
+    if (Number(fuelLevelValue) < 10000) {
+      fuelStatus.innerHTML = `Fuel level is ${fuelLevelValue}. Fuel level too low for launch.`;
+      launchStatus.innerHTML = 'Shuttle not ready for launch.';
+      launchStatus.style.color = 'red'
+      } else if (Number(cargoLevelValue) > 10000) {
+      cargoStatus.innterHTML = `Cargo level is ${cargoLevelValue}. Cargo level too high for launch.`
+      launchStatus.innerHTML = 'Shuttle not ready for launch.';
+      launchStatus.style.color = 'red'
+    } else {
+      launchStatus.innerHTML = 'Shuttle is ready for launch.';
+      launchStatus.style.color = 'green'
     }
-  });
+  };
   
-}
   
   // check if any of the values are empty
     // if (validateInput(pilotValue) === 'Empty' || validateInput(copilotValue) === 'Empty')
@@ -77,17 +110,20 @@ async function myFetch() {
     let planetsReturned;
 
   planetsReturned = await fetch('https://handlers.education.launchcode.org/static/planets.json').then(function (response) {
-      // get the json from the response
+      response.json().then(function (json) {
+        console.log(json);
+      });
         });
 
     return planetsReturned;
 }
 
 function pickPlanet(planets) {
-  // randomly pick a planet from the array
-  // Math random for index
+  let planet = json[(Math.round(Math.random()*(arr.length-1)))];
+  return planet;
 }
-
+// randomly pick a planet from the array
+  // Math random for index
 module.exports.addDestinationInfo = addDestinationInfo;
 module.exports.validateInput = validateInput;
 module.exports.formSubmission = formSubmission;

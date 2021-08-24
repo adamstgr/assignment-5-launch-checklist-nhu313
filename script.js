@@ -19,9 +19,14 @@ window.addEventListener("load", function() {
    })
 
 
-   // get the form
-   // add a listener to when the form submit
-  //  form.addEventListener('submit', function(event) {
+   let form = document.querySelector("form");
+   form.addEventListener("submit", function(event) {
+     event.preventDefault();
+     let pilotInput = this.document.querySelector("input[name=pilotName]");
+     let copilotInput = this.document.querySelector("input[name=copilotName]");
+     let fuelLevelInput = this.document.querySelector("input[name=fuelLevel]");
+     let cargoMassInput = this.document.querySelector("input[name=cargoMass]");
+    });
       // if it's not, preventDefault
       // get the value for each of the input field
       // let pilotInput = this.document.querySelector("input[name=pilotName]");
